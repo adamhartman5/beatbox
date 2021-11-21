@@ -28,7 +28,7 @@ const Beatbox = () => {
         {src: Sad, label: 'Sad', key:'C'},
     ]
 
-    const playAudio = (clip, label, key ) => {
+    const playAudio = (clip, label, key) => {
         const sound = new Howl({
             src: [clip]
         })
@@ -50,7 +50,7 @@ const Beatbox = () => {
                         let key = soundObj.key;
                         let selected = key === selectedKey ? true : false;
 
-                        return <Button onClick={()=> playAudio(clip, label, key)} selected={selected}>
+                        return <Button onClick={()=> playAudio(clip, label, key)} selected={selected} key={key}>
                             {key}
                         </Button>
                     }   
