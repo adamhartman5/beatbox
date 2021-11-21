@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Button from './Button'
 import {Howl} from 'howler'
 import Bubble from '../audioclips/bubbleblip.mp3'
 import Laugh from '../audioclips/evillaugh.mp3'
@@ -15,6 +14,7 @@ import Sad from '../audioclips/trumpetsad.mp3'
 const Beatbox = () => {
 
     const [label, setLabel] = useState("Press a key");
+    const [selectedKey, setSelectedKey] = useState("");
 
     const audioClips = [
         {src: Bubble, label: 'Bubble', key:'Q'},
@@ -28,16 +28,13 @@ const Beatbox = () => {
         {src: Sad, label: 'Sad', key:'C'},
     ]
 
-    const playAudio = (letter) => {
-        audioClips.map((clip) => {
-            if (clip.key === letter.target.textContent){
-                const sound = new Howl({
-                    src: [clip.src]
-                })
-                setLabel(clip.label)
-                sound.play()
-            }
+    const playAudio = (clip, label, key ) => {
+        const sound = new Howl({
+            src: [clip]
         })
+        setSelectedKey(key)
+        setLabel(label)
+        sound.play()
     }
 
     return (
@@ -47,8 +44,16 @@ const Beatbox = () => {
                     {label}
                 </Display>
                 <ButtonsContainer>
-                    {audioClips.map((letter) =>   
-                        <Button letter={letter.key} playAudio={playAudio}/>
+                    {audioClips.map((soundObj) => {
+                        let clip = soundObj.src;
+                        let label = soundObj.label;
+                        let key = soundObj.key;
+                        let selected = key === selectedKey ? true : false;
+
+                        return <Button onClick={()=> playAudio(clip, label, key)} selected={selected}>
+                            {key}
+                        </Button>
+                    }   
                     )}
                 </ButtonsContainer>
             </Main>
@@ -105,4 +110,26 @@ const ButtonsContainer = styled.div`
     height: 75%;
     margin: 10px;
     box-sizing: border-box;
+`
+
+const Button = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    margin: 8px;
+    color: #d5d5d5;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: "Roboto", sans-serif;
+    border-radius: 53px;
+    background: ${props => props.selected ? "rgb(3, 186, 252)": "linear-gradient(145deg, #61baca, #74ddf0)"};
+    box-shadow:  17px 17px 33px #61baca,
+                -17px -17px 33px #77e4f6;
+
+
+    :hover {
+        background: linear-gradient(145deg, #7a32ca, #903bf0);
+    }
 `
